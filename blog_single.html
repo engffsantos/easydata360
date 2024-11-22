@@ -111,9 +111,9 @@
         <div class="container">
             <div class="row" data-aos="fade-up" data-aos-duration="700">
                 <div class="col-sm-12">
-                    <img src="images/index.jpg" alt="" class="img-thumbnail image">
+                    <img id="post-img" src="" alt="" class="img-thumbnail image">
                     <div class="heading">
-                        <h2>Segurança da Informação: Protegendo seus dados</h2>
+                        <h2 id="post-titulo">Carregando título...</h2>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                 <div class="row">
                     <div class="col-sm-5 col-md-6">
                         <div class="inner-text">
-                            <h3>30 de Outubro, 2024 Postado por <span>easydata360</span> Em : <span><a href="#">Tecnologia</a></span></h3>
+                            <h3 id="post-data">Carregando data...</h3>
                         </div>
                     </div>
                     <div class="col-sm-7 col-md-6">
@@ -144,46 +144,9 @@
             </div>
             <div class="row" data-aos="fade-up" data-aos-duration="700">
                 <div class="col-sm-12 col-lg-12 box">
-                    <p>Bem-vindo ao blog da easydata360, onde compartilhamos insights sobre segurança da informação, governança de TI, cloud computing e ciência de dados. Nosso objetivo é ajudar sua empresa a se manter segura e eficiente no ambiente digital.</p>
-                    <p>Descubra como proteger suas informações em um ambiente digital em constante evolução. Técnicas e práticas recomendadas para manter seus dados seguros e sua empresa em conformidade com as regulamentações.</p>
-                    <p>Estamos comprometidos em fornecer soluções personalizadas que atendam às necessidades específicas de cada cliente, garantindo a proteção e a eficiência operacional.</p>
-                    <p>Nosso blog é uma fonte de conhecimento para empresas que buscam otimizar processos e proteger informações críticas. Acompanhe nossas postagens para ficar atualizado com as melhores práticas e inovações do mercado.</p>
-                    <p>Se você deseja saber mais sobre como a easydata360 pode ajudar sua empresa, entre em contato conosco. Estamos prontos para oferecer suporte e soluções que capacitam sua organização a prosperar no ambiente digital.</p>
-                    <p>Nosso compromisso é com a segurança, a eficiência e a inovação. Acompanhe nosso blog para obter insights valiosos e dicas práticas para proteger e otimizar sua empresa.</p>
+                    <div id="post-conteudo">Carregando conteúdo do post...</div>
                 </div>
             </div>
-            <section class="section4 more-blog" data-aos="fade-up" data-aos-duration="700">
-                <h2 class="background"><span>Posts Similares</span></h2>
-                <div class="container">
-                    <div class="row" data-aos="fade-up" data-aos-duration="700">
-                        <div class="card-deck">
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-2.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Segurança</a>
-                                    <p class="card-text"><small class="text-muted">24 de Janeiro, 2024</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Implementação de Políticas de Segurança</a></p>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-3.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Governança</a>
-                                    <p class="card-text"><small class="text-muted">24 de Janeiro, 2024</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Estruturação de Governança de TI</a></p>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-5.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Cloud Computing</a>
-                                    <p class="card-text"><small class="text-muted">24 de Janeiro, 2024</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Migração para a Nuvem</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
     </div>
@@ -326,6 +289,33 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/animate.js"></script>
     <script src="js/custom.js"></script>
+    <script>
+        function getParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const postId = getParam("id");
+
+        fetch("posts.json")
+            .then(res => res.json())
+            .then(posts => {
+                const post = posts.find(p => p.id == postId);
+                if (!post) {
+                    document.getElementById("post-titulo").textContent = "Post não encontrado.";
+                    return;
+                }
+                document.getElementById("post-titulo").textContent = post.titulo;
+                document.getElementById("post-data").textContent = `${new Date(post.data).toLocaleDateString("pt-BR")} — Postado por easydata360`;
+                document.getElementById("post-img").src = post.imagem;
+                document.getElementById("post-img").alt = post.titulo;
+                document.getElementById("post-conteudo").innerHTML = "<p>" + post.conteudo.replace(/\n/g, "</p><p>") + "</p>";
+            })
+            .catch(error => {
+                console.error("Erro ao carregar post:", error);
+                document.getElementById("post-conteudo").innerHTML = "<p>Erro ao carregar o conteúdo do post.</p>";
+            });
+    </script>
 </body>
 
 </html>

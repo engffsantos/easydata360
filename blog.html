@@ -102,58 +102,11 @@
         </div>
     </div>    
     <hr>
+
     <div class="container">
         <!--/row-->
-        <div class="row">
-            <div class="col-lg-4 col-sm-12 col-12 box-1" data-aos="fade-right" data-aos-delay="300">
-                <figure class="figure">
-                    <a href="blog_single.html"><img src="images/blog-1.jpg" class="figure-img img-fluid" alt="blog"></a>
-                    <figcaption class="figure-caption">
-                        <h2><a href="blog_single.html">Segurança da Informação: Protegendo seus dados</a></h2>
-                        <p>Descubra como proteger suas informações em um ambiente digital em constante evolução. Técnicas e práticas recomendadas para manter seus dados seguros.</p>
-                        <a href="blog_single.html" class="btn btn-success">+ mais</a>
-                    </figcaption>
-                </figure>
-            </div>
-            <div class="col-lg-8 col-sm-12 col-12" data-aos="fade-left" data-aos-delay="300">
-                <div class="row">
-                    <div class="col-sm-6 col-12 box-2">
-                        <figure class="figure">
-                            <a href="blog_single.html"><img src="images/blog-2.jpg" class="figure-img img-fluid" alt="blog"></a>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-12 box-3">
-                        <h4><a href="blog_single.html">Governança de TI: Estruturando seu negócio</a></h4>
-                        <h5>Saiba como a governança de TI pode ajudar sua empresa a alcançar seus objetivos estratégicos e melhorar a eficiência operacional.</h5>
-                        <a href="blog_single.html" class="btn btn-success">+ mais</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-12 box-4">
-                        <figure class="figure">
-                            <a href="blog_single.html"><img src="images/blog-3.jpg" class="figure-img img-fluid" alt="blog"></a>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-12 box-5">
-                        <h4><a href="blog_single.html">Cloud Computing: Vantagens e Desafios</a></h4>
-                        <h5>Entenda os benefícios e desafios da migração para a nuvem e como otimizar seu ambiente em cloud computing.</h5>
-                        <a href="blog_single.html" class="btn btn-success">+ mais</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-12 box-6">
-                        <figure class="figure">
-                            <a href="blog_single.html"><img src="images/blog-1.jpg" class="figure-img img-fluid" alt="blog"></a>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-12 box-7">
-                        <h4><a href="blog_single.html">Ciência de Dados: Transformando Dados em Insights</a></h4>
-                        <h5>Descubra como a ciência de dados pode transformar grandes volumes de dados em insights acionáveis para o seu negócio.</h5>
-                        <a href="blog_single.html" class="btn btn-success">+ mais</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="blog-container" class="row"></div>
+
         <div class="row bt">
             <div class="col-sm-12">
                 <ul>
@@ -306,6 +259,54 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/animate.js"></script>
     <script src="js/custom.js"></script>
+    <script>
+        fetch('posts.json')
+            .then(res => res.json())
+            .then(posts => {
+                const container = document.getElementById('blog-container');
+                let html = '';
+
+                posts.forEach((post, index) => {
+                    if (index === 0) {
+                        html += `
+        <div class="col-lg-4 col-sm-12 col-12 box-1" data-aos="fade-right" data-aos-delay="300">
+          <figure class="figure">
+            <a href="blog_single.html?id=${post.id}"><img src="${post.imagem}" class="figure-img img-fluid" alt="blog"></a>
+            <figcaption class="figure-caption">
+              <h2><a href="blog_single.html?id=${post.id}">${post.titulo}</a></h2>
+              <p>${post.descricao}</p>
+              <a href="blog_single.html?id=${post.id}" class="btn btn-success">+ mais</a>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="col-lg-8 col-sm-12 col-12" data-aos="fade-left" data-aos-delay="300">
+        `;
+                    } else {
+                        html += `
+        <div class="row">
+          <div class="col-sm-6 col-12">
+            <figure class="figure">
+              <a href="blog_single.html?id=${post.id}"><img src="${post.imagem}" class="figure-img img-fluid" alt="blog"></a>
+            </figure>
+          </div>
+          <div class="col-sm-6 col-12">
+            <h4><a href="blog_single.html?id=${post.id}">${post.titulo}</a></h4>
+            <h5>${post.descricao}</h5>
+            <a href="blog_single.html?id=${post.id}" class="btn btn-success">+ mais</a>
+          </div>
+        </div>`;
+                    }
+                });
+
+                html += `</div>`; // fecha a <div class="col-lg-8 ..."> aberta no primeiro post
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar posts:', error);
+                document.getElementById('blog-container').innerHTML = "<p>Erro ao carregar posts.</p>";
+            });
+    </script>
+
 </body>
 
 </html>
